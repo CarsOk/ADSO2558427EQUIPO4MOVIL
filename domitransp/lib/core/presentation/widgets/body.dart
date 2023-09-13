@@ -15,7 +15,7 @@ class Body extends StatelessWidget{
         },
         builder: (context, state) {
           if (state is HomeLoading){
-            return LoadingAnimate();
+            return CustomLoadingAnimation();
           }
           return Home();
         },

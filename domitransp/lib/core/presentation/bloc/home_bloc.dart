@@ -16,7 +16,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     emit(HomeLoading());
 
     bool bannerPromocion = await homeRepository.bannerPromocion();
-
+    await Future.delayed(const Duration(milliseconds: 3000), () {});
     if (bannerPromocion){
       emit(HomeSucess());
     } else {
