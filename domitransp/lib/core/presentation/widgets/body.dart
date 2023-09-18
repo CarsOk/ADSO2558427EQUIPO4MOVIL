@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:domitransp/core/presentation/bloc/home_bloc.dart';
 import 'package:domitransp/core/presentation/widgets/home.dart';
 import 'package:domitransp/widgets/loading_animate.dart';
+import '../../../feature/consult/presentation/widgets/consult.dart';
 
 class Body extends StatelessWidget{
   @override
@@ -17,7 +18,8 @@ class Body extends StatelessWidget{
           if (state is HomeLoading){
             return CustomLoadingAnimation();
           }
-          return Home();
+          // return Home();
+          return Consult();
         },
       ),
     );

@@ -13,10 +13,8 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   }
 
   Future<void> _mapStared(HomeStarted event, Emitter<HomeState> emit) async {
-    emit(HomeLoading());
 
     bool bannerPromocion = await homeRepository.bannerPromocion();
-    await Future.delayed(const Duration(milliseconds: 3000), () {});
     if (bannerPromocion){
       emit(HomeSucess());
     } else {

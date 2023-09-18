@@ -1,8 +1,8 @@
-import 'package:domitransp/core/data/repository/home_repository.dart';
-import 'package:domitransp/core/presentation/bloc/home_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import 'package:domitransp/core/presentation/bloc/home_bloc.dart';
+import 'package:domitransp/core/data/repository/home_repository.dart';
 import 'core/presentation/widgets/body.dart';
 
 void main(){
