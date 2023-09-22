@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../routes/routes.dart';
 
 class Home extends StatelessWidget {
   @override
@@ -20,11 +21,21 @@ class Home extends StatelessWidget {
                   color: Color(0xFF4E0096),
                   icon: Icons.local_shipping,
                   title: 'Consultar Envío',
+                  gesture: GestureDetector(
+                    onTap: () {
+                      Navigator.pushNamed(context, 'consult');
+                    },
+                  )
                 ),
                 CategoryButton(
                   color: Color(0xFF4E0096),
                   icon: Icons.contact_phone,
                   title: 'Contáctanos',
+                  gesture: GestureDetector(
+                    onTap: () {
+                      Navigator.pushNamed(context, 'consult');
+                    },
+                  )
                 ),
               ],
             ),
@@ -35,11 +46,21 @@ class Home extends StatelessWidget {
                   color: Color(0xFF4E0096),
                   icon: Icons.web,
                   title: 'Web View',
+                  gesture: GestureDetector(
+                    onTap: () {
+                      Navigator.pushNamed(context, 'consult');
+                    },
+                  )
                 ),
                 CategoryButton(
                   color: Color(0xFF4E0096),
                   icon: Icons.help,
                   title: 'Ayuda',
+                  gesture: GestureDetector(
+                    onTap: () {
+                      Navigator.pushNamed(context, 'consult');
+                    },
+                  )
                 ),
               ],
             ),
@@ -54,17 +75,20 @@ class CategoryButton extends StatelessWidget {
   final Color color;
   final IconData icon;
   final String title;
+  GestureDetector gesture;
 
   CategoryButton({
     required this.color,
     required this.icon,
     required this.title,
+    required this.gesture,
   });
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
+        Navigator.pushNamed(context, 'consult');
         // Puedes navegar a otras pantallas aquí cuando tengas implementadas las rutas.
         // Navigator.push(context, MaterialPageRoute(builder: (context) => OtraPantalla()));
       },

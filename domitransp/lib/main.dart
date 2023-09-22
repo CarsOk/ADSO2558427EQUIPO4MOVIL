@@ -1,3 +1,4 @@
+import 'package:domitransp/routes/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -22,9 +23,10 @@ class MyApp extends StatelessWidget{
           debugShowCheckedModeBanner: false,
           title: 'Domitransp',
           theme: ThemeData(
-            primarySwatch: Colors.blue,
+            primarySwatch: Colors.purple,
           ),
           home: Body(),
+          routes: routes,
         ),
       ),
     );
