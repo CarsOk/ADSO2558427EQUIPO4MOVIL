@@ -1,6 +1,6 @@
-import 'package:domitransp/routes/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:domitransp/routes/routes.dart';
 
 import 'package:domitransp/core/presentation/bloc/home_bloc.dart';
 import 'package:domitransp/core/data/repository/home_repository.dart';

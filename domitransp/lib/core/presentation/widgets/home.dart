@@ -21,21 +21,17 @@ class Home extends StatelessWidget {
                   color: Color(0xFF4E0096),
                   icon: Icons.local_shipping,
                   title: 'Consultar Envío',
-                  gesture: GestureDetector(
-                    onTap: () {
-                      Navigator.pushNamed(context, 'consult');
-                    },
-                  )
+                  onTap: () {
+                    Navigator.pushNamed(context, 'consult');
+                  },
                 ),
                 CategoryButton(
                   color: Color(0xFF4E0096),
                   icon: Icons.contact_phone,
                   title: 'Contáctanos',
-                  gesture: GestureDetector(
-                    onTap: () {
-                      Navigator.pushNamed(context, 'consult');
-                    },
-                  )
+                  onTap: () {
+                    Navigator.pushNamed(context, 'new_request');
+                  },
                 ),
               ],
             ),
@@ -46,21 +42,17 @@ class Home extends StatelessWidget {
                   color: Color(0xFF4E0096),
                   icon: Icons.web,
                   title: 'Web View',
-                  gesture: GestureDetector(
-                    onTap: () {
-                      Navigator.pushNamed(context, 'consult');
-                    },
-                  )
+                  onTap: () {
+                    Navigator.pushNamed(context, 'webview');
+                  },
                 ),
                 CategoryButton(
                   color: Color(0xFF4E0096),
                   icon: Icons.help,
                   title: 'Ayuda',
-                  gesture: GestureDetector(
-                    onTap: () {
-                      Navigator.pushNamed(context, 'consult');
-                    },
-                  )
+                  onTap: () {
+                    
+                  },
                 ),
               ],
             ),
@@ -75,23 +67,20 @@ class CategoryButton extends StatelessWidget {
   final Color color;
   final IconData icon;
   final String title;
-  GestureDetector gesture;
+  GestureDetector? gesture;
+  Function()? onTap;
 
   CategoryButton({
     required this.color,
     required this.icon,
     required this.title,
-    required this.gesture,
+    this.onTap,
   });
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {
-        Navigator.pushNamed(context, 'consult');
-        // Puedes navegar a otras pantallas aquí cuando tengas implementadas las rutas.
-        // Navigator.push(context, MaterialPageRoute(builder: (context) => OtraPantalla()));
-      },
+      onTap: onTap,
       child: Container(
         width: 150,
         height: 150,

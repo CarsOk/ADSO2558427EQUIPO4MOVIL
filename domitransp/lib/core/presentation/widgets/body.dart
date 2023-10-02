@@ -20,9 +20,9 @@ class Body extends StatelessWidget{
           if (state is HomeLoading){
             return CustomLoadingAnimation();
           }
-          // return Home();
+          return Home();
           // return Consult();
-          return WebView();
+          // return WebView();
         },
       ),
     );

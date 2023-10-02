@@ -21,7 +21,7 @@ class _WebViewState extends State<WebViewPage> {
         title: Text('Domitransp'),
       ),
       body: WebView(
-        initialUrl: 'https://156b-186-82-87-153.ngrok-free.app/', // URL de la página web a cargar
+        initialUrl: 'https://google.com', // URL de la página web a cargar
         javascriptMode: JavascriptMode.unrestricted, // Habilita JavaScript (opcional)
       ),
     );
