@@ -1,9 +1,12 @@
+import 'package:domitransp/feature/web_view/pages/webview_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:domitransp/core/presentation/bloc/home_bloc.dart';
 import 'package:domitransp/core/presentation/widgets/home.dart';
 import 'package:domitransp/widgets/loading_animate.dart';
+import 'package:webview_flutter/webview_flutter.dart';
+import '../../../feature/consult/presentation/widgets/consult.dart';
 
 class Body extends StatelessWidget{
   @override
@@ -17,7 +20,9 @@ class Body extends StatelessWidget{
           if (state is HomeLoading){
             return CustomLoadingAnimation();
           }
-          return Home();
+          // return Home();
+          // return Consult();
+          return WebView();
         },
       ),
     );

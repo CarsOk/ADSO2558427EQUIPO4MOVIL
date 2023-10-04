@@ -39,6 +39,7 @@ dependencies:
   postgres: ^2.6.1
   flutter_bloc: ^8.0.1
   flutter_secure_storage: ^5.0.2
+  webview_flutter: ^2.0.13
 
 dev_dependencies:
   flutter_test:

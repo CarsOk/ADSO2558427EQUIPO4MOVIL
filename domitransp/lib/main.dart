@@ -1,8 +1,9 @@
-import 'package:domitransp/core/data/repository/home_repository.dart';
-import 'package:domitransp/core/presentation/bloc/home_bloc.dart';
+import 'package:domitransp/routes/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import 'package:domitransp/core/presentation/bloc/home_bloc.dart';
+import 'package:domitransp/core/data/repository/home_repository.dart';
 import 'core/presentation/widgets/body.dart';
 
 void main(){
@@ -22,9 +23,10 @@ class MyApp extends StatelessWidget{
           debugShowCheckedModeBanner: false,
           title: 'Domitransp',
           theme: ThemeData(
-            primarySwatch: Colors.blue,
+            primarySwatch: Colors.purple,
           ),
           home: Body(),
+          routes: routes,
         ),
       ),
     );
