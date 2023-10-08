@@ -26,7 +26,8 @@ class NewRequestBloc extends Bloc<NewRequestEvent, NewRequestState> {
       print('Este es el uuid numero unico $uuid');
       bool insercion = await requestRepository.insertRequest(email: event.email, name: event.name, title: event.title, subject: event.subject, code: codigoRequest);
       if(insercion){
-        SharedPreferences prefs = await SharedPreferences.getInstance();
+        try {
+          SharedPreferences prefs = await SharedPreferences.getInstance();
         List<String> codigoList = prefs.getStringList('codigoList') ?? [];
         codigoList.add(codigoRequest);
         await prefs.setStringList('codigoList', codigoList);
@@ -34,6 +35,12 @@ class NewRequestBloc extends Bloc<NewRequestEvent, NewRequestState> {
         List<String>? listaactual = prefs.getStringList('codigoList');
         print('lista actual: ${listaactual}');
         emit(NewRequestInSuccess());
+        } catch (e) {
+          print('Falle apunto de de instertar');
+          print(e);
+          emit(NewRequestInFailure(message: 'Erroren el envio'));
+        }
+        
       }else{
         SharedPreferences prefs = await SharedPreferences.getInstance();
         emit(NewRequestInFailure(message: 'Error de conexion'));

@@ -10,19 +10,19 @@ class _WebViewState extends State<WebViewPage> {
   @override
   void initState() {
     super.initState();
-    // Habilita JavaScript en el WebView (opcional, según tus necesidades)
-    WebView.platform = SurfaceAndroidWebView(); // Si estás en Android
+    WebView.platform = SurfaceAndroidWebView();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Color(0xFF4E0096),
         title: Text('Domitransp'),
       ),
       body: WebView(
-        initialUrl: 'https://google.com', // URL de la página web a cargar
-        javascriptMode: JavascriptMode.unrestricted, // Habilita JavaScript (opcional)
+        initialUrl: 'https://fd31-2803-1800-500e-2b97-a325-40da-515c-e6a4.ngrok-free.app',
+        javascriptMode: JavascriptMode.unrestricted,
       ),
     );
   }
