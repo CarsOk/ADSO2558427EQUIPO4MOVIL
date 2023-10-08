@@ -1,11 +1,16 @@
 import 'package:postgres/postgres.dart';
+import 'dart:io';
+import 'package:intl/intl.dart';
 
 class RequestRepository {
-  final _baseUrl = 'bvhfjwkf20bxxmiymhsl-postgresql.services.clever-cloud.com';
+  final _baseUrl = 'b5xn4aiw71dpvzecdgzw-postgresql.services.clever-cloud.com';
   final _puerto = 5432;
-  final _nombre_base_datos = 'bvhfjwkf20bxxmiymhsl';
-  final _usuario = 'uhodsejm5l5i75kfbjgj';
-  final _contrasena = '81vkBW4M8QAQETmVieuThN0ZdnRbtU';
+  final _nombre_base_datos = 'b5xn4aiw71dpvzecdgzw';
+  final _usuario = 'u11nk76ov6hufjlqcdvy';
+  final _contrasena = 'qESlbEQ5OahuAKZkrhXYjgcNhmoO50';
+  String _created_at = DateFormat('yyyy-MM-dd HH:mm:ss').format(DateTime.now());
+  String _updated_at = DateFormat('yyyy-MM-dd HH:mm:ss').format(DateTime.now());
+
   bool sendRequest(){
 
     //codigo para conectar en postgres y enviar solicitud
@@ -23,19 +28,25 @@ class RequestRepository {
       );
 
     try {
-      
+      print("Esto es la fecha ${_created_at}");
+      print("Esto es la fecha ${_created_at.runtimeType}");
       await connection.open();
 
-      await connection.query(
-        'INSERT INTO requests (title, name, subject, email, code) VALUES (@title, @name, @subject, @email, @code)',
+      final envio = await connection.query(
+        'INSERT INTO requests (title, name, subject, email, code, created_at, updated_at) VALUES (@title, @name, @subject, @email, @code, @created_at, @updated_at)',
         substitutionValues: {
           'title': title,
           'name': name,
           'subject': subject,
           'email': email,
           'code': code,
+          'created_at': _created_at,
+          'updated_at': _updated_at
         },
-      );
+      );  
+      print('Esto es envio ${envio}');
+      print('Esto es envio ${envio.runtimeType}');
+
       await connection.close();
       print('lo hice bien, guarde los datos');
       return true;
