@@ -30,7 +30,7 @@ class Home extends StatelessWidget {
                   icon: Icons.contact_phone,
                   title: 'Contáctanos',
                   onTap: () {
-                    Navigator.pushNamed(context, 'new_request');
+                    Navigator.pushNamed(context, 'list_request');
                   },
                 ),
               ],

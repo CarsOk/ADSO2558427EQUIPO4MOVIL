@@ -16,6 +16,14 @@
         appBar: AppBar(
                   title: Text('Peticiones'),
                   backgroundColor: Color(0xFF4E0096),
+                  actions: <Widget>[
+                    IconButton(
+                        onPressed: (){
+                        Navigator.pushNamed(context, 'new_request');
+                      }, 
+                      icon: Icon(Icons.note_add)
+                    )
+                  ],
                 ),
         body: RepositoryProvider(
           create: (context) => RequestRepository(),
@@ -36,8 +44,8 @@
                                 if(index < state.listaPedidos.length){
                                   final request = requests[index];
                                   return ListTile(
-                                    title: Text(request.toString()),
-                                    // subtitle: Text(car.nombre),
+                                    title: Text(request.title),
+                                    subtitle: Text(request.createdAt.toIso8601String()),
                                     leading: Icon(Icons.car_rental),
                                     trailing: const Icon(Icons.arrow_forward_ios),
                                     onTap: () {
@@ -54,12 +62,14 @@
                                   return Container();
                                 }
                               }
-                              );
+                            );
                         // ),
                         // child: Text('Pagina de lista de pedidos'),
                       // );
                     }else if(state is RequestListInProgress){
                       return CustomLoadingAnimation();
+                    } else if(state is RequestListEmpty){
+                      return (Text('No hay nada en la lista'));
                     } else{
                       return(Text('Explotoooooo'));
                     }
