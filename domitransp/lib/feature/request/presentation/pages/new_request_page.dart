@@ -11,7 +11,6 @@ class NewRequestPage extends StatelessWidget {
   final _nameController = TextEditingController();
   final _subjectController = TextEditingController();
   final _emailController = TextEditingController();
-  final _codeController = TextEditingController();
   bool isFormValid = false;
   final _formKey = GlobalKey<FormState>(); // Agrega esta línea para definir _formKey
 
@@ -33,6 +32,7 @@ class NewRequestPage extends StatelessWidget {
         child: BlocConsumer<NewRequestBloc, NewRequestState>(
           listener: (context, state) {
             if (state is NewRequestInSuccess) {
+              Navigator.of(context).pop();
               Navigator.pushNamed(context, 'list_request');
             }
           },
