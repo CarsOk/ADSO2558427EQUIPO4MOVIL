@@ -5,7 +5,6 @@ import 'package:domitransp/feature/request/presentation/pages/request_list_page.
 import 'package:domitransp/feature/web_view/pages/webview_page.dart';
 import 'package:domitransp/core/presentation/widgets/home.dart';
 
-import '../feature/request/presentation/pages/request_detail_page.dart';
 
 final Map<String, WidgetBuilder> routes = {
   'home': (BuildContext context) => Home(),
