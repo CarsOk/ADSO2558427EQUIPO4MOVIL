@@ -35,7 +35,6 @@ class RequestListDto{
   DateTime createdAt;
   DateTime updatedAt;
   String estado;
-  String rol;
 
   RequestListDto({
     required this.id,
@@ -47,7 +46,6 @@ class RequestListDto{
     required this.createdAt,
     required this.updatedAt,
     required this.estado,
-    required this.rol,
     });
 
 }
@@ -56,7 +54,7 @@ List<RequestListDto> requestList(List responsePostgres){
   List<RequestListDto> requestList = [];
 
     for (var row in responsePostgres) {
-      // Accede a los valores de cada fila directamente por índice
+
       RequestListDto request = RequestListDto(
         id: row[0].toString(),
         title: row[1].toString(),
@@ -67,11 +65,9 @@ List<RequestListDto> requestList(List responsePostgres){
         createdAt: DateTime.tryParse(row[6].toString()) ?? DateTime.now(),
         updatedAt: DateTime.tryParse(row[7].toString()) ?? DateTime.now(),
         estado: row[8]?.toString() ?? "",
-        rol: row[9]?.toString() ?? "",
       );
 
-      // Agrega cada objeto RequestListDto a la lista
       requestList.add(request);
     }
   return requestList;
-}
+} 
