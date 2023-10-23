@@ -24,3 +24,9 @@ class RequestChatSuccess extends RequestChatState {
 
 class RequestChatClose extends RequestChatState {}
 
+class RequestChatEmpty extends RequestChatState {
+  List<ChatDto> chatList;
+
+  RequestChatEmpty({required this.chatList});
+}
+

@@ -80,7 +80,8 @@ class RequestRepository {
         List<ChatDto> getChatList = chatList(response.toList());
         return getChatList;
       }else{
-        throw ResponseEmpty();
+        // throw ResponseEmpty();
+        return [];
       }
     } catch (e) {
       print('Falle en el metodo GetChat: $e');
