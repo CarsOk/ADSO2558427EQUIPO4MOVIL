@@ -1,11 +1,13 @@
-  import 'package:flutter/material.dart';
+  import 'package:domitransp/widgets/loading_chat_animate.dart';
+import 'package:flutter/material.dart';
   import 'package:domitransp/feature/request/data/repository/request_repository.dart';
   import 'package:domitransp/widgets/loading_animate.dart';
   import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
   import 'package:shared_preferences/shared_preferences.dart';
 
-  import '../bloc/request_list/request_list_bloc.dart';
+  import '../../../../widgets/failure_widget.dart';
+import '../bloc/request_list/request_list_bloc.dart';
 import 'request_chat_page.dart';
 
 
@@ -68,11 +70,18 @@ import 'request_chat_page.dart';
                         // child: Text('Pagina de lista de pedidos'),
                       // );
                     }else if(state is RequestListInProgress){
-                      return CustomLoadingAnimation();
-                    } else if(state is RequestListEmpty){
-                      return (Text('No hay nada en la lista'));
+                      return LoadingChatAnimate();
+                    } else if(state is RequestListFailure){
+                      return(
+                        FailureWidget(
+                          function: ()  => BlocProvider.of<RequestListBloc>(context).add(RequestListStarted()),
+                          message: state.message,
+                        )
+                      );
+                      
                     } else{
-                      return(Text('Explotoooooo'));
+                      return (Text('No hay nada en la lista'));
+                
                     }
                     
                   },

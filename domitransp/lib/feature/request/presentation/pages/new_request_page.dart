@@ -1,3 +1,4 @@
+import 'package:domitransp/widgets/general_animate_loading.dart';
 import 'package:flutter/material.dart';
 import 'package:domitransp/feature/request/data/repository/request_repository.dart';
 import 'package:domitransp/widgets/loading_animate.dart';
@@ -38,7 +39,7 @@ class NewRequestPage extends StatelessWidget {
           },
           builder: (context, state) {
             if(state is NewRequestInProgress){
-              return CustomLoadingAnimation();
+              return GeneralAnimateLoading();
             } else if(state is NewRequestInFailure){
               // return AlertDialog(
               //   title: const Text("Error"),
