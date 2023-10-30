@@ -1,0 +1,13 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  nit: MyString
+  razon_social: MyString
+  rut: MyString
+  users_count: 1
+
+two:
+  nit: MyString
+  razon_social: MyString
+  rut: MyString
+  users_count: 1
