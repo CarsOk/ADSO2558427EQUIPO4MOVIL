@@ -1,0 +1,11 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  ruta: MyString
+  horario: 2023-10-30 13:29:44
+  switch: 
+
+two:
+  ruta: MyString
+  horario: 2023-10-30 13:29:44
+  switch: 

@@ -1,0 +1,27 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  fecha: 2023-10-30
+  consecutivo: 1
+  avatar: MyString
+  destino: MyString
+  origen: MyString
+  estado: MyString
+  codigo_envio: MyString
+  valor: 9.99
+  reference: 
+  reference: 
+  reference: 
+
+two:
+  fecha: 2023-10-30
+  consecutivo: 1
+  avatar: MyString
+  destino: MyString
+  origen: MyString
+  estado: MyString
+  codigo_envio: MyString
+  valor: 9.99
+  reference: 
+  reference: 
+  reference: 

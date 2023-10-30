@@ -1,0 +1,18 @@
+default: &default
+  adapter: postgresql
+  encoding: unicode
+  pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+  host: isabelle.db.elephantsql.com
+  port: 5432
+
+development:
+  <<: *default
+  database: frqhbkwr
+  username: frqhbkwr
+  password: b4Zyz4y5rcrH1wBGscy5mT7h2iRQRIle
+
+production:
+  <<: *default
+  database: b75lndxsnlx9i4qbi66v
+  username: uhodsejm5l5i75kfbjgj
+  password: 81vkBW4M8QAQETmVieuThN0ZdnRbtU
