@@ -1,8 +1,9 @@
 import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
 
+import '../../data/respository/home_repository.dart';
 
-import '../../data/repository/home_repository.dart';
+
 part 'home_event.dart';
 part 'home_state.dart';
 

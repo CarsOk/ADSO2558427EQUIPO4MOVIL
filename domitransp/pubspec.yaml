@@ -43,6 +43,8 @@ dependencies:
   webview_flutter: ^2.0.13
   uuid: ^3.0.4
   intl: ^0.17.0
+  carousel_slider: ^4.0.0
+  dio: ^5.3.3
 
 dev_dependencies:
   flutter_test:
