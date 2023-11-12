@@ -31,8 +31,8 @@ class _BodyState extends State<Body> {
             return CustomLoadingAnimation();
           } else if (state is UserCredentialJoined){
           return Scaffold(
-                        body: Text('tengo usuario'),
-            );
+            body: Text('tengo usuario'),
+          );
           } else {
             pages = [
               HomePage(),

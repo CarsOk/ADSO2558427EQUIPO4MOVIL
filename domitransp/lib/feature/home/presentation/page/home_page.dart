@@ -1,4 +1,5 @@
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:domitransp/feature/home/presentation/widget/category_icon_widget.dart';
 import 'package:flutter/material.dart';
 import '../../../../routes/routes.dart';
 
@@ -62,6 +63,8 @@ class _HomeState extends State<HomePage> {
   }
 }
 
+
+
 class CategoryButton extends StatelessWidget {
   final Color color;
   final IconData icon;
@@ -103,6 +106,12 @@ class CategoryButton extends StatelessWidget {
                 fontWeight: FontWeight.bold,
                 fontSize: 16,
               ),
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                CategoryIconWidget(icono: Icons.add, onTap: (){}, nombre: 'giros nacionales'),
+              ],
             ),
           ],
         ),
