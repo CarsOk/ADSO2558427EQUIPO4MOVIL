@@ -1,3 +1,7 @@
+import 'package:curved_navigation_bar/curved_navigation_bar.dart';
+import 'package:domitransp/feature/account/presentation/page/account_page.dart';
+import 'package:domitransp/feature/agency/presentation/page/agency_page.dart';
+import 'package:domitransp/feature/services/presentation/page/service_page.dart';
 import 'package:flutter/material.dart';
 import 'package:domitransp/feature/web_view/pages/webview_page.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -14,7 +18,28 @@ class Body extends StatefulWidget{
 
 class _BodyState extends State<Body> {
   int paginaActual = 0;
+  int paginaAnterior = 0;
   List pages = [];
+  List<Icon> items = [
+    const Icon(Icons.home, size: 30, color: Color.fromRGBO(79, 0, 148, 58),),
+    const Icon(Icons.build, size: 30, color: Color.fromRGBO(79, 0, 148, 58)),
+    const Icon(Icons.account_circle, size: 30, color: Color.fromRGBO(79, 0, 148, 58)),
+    const Icon(Icons.location_on, size: 30, color: Color.fromRGBO(79, 0, 148, 58)),
+  ];
+  final screens = [
+    HomePage(),
+    ServicePage(),
+    AccountPage(),
+    AgencyPage(),
+  ];
+  @override
+  void initState() {
+    print('Hice el initstate');
+    paginaAnterior = paginaActual;
+    items[0] = setIcon(icono: items[0]);
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     print('Entre al body');
@@ -44,34 +69,21 @@ class _BodyState extends State<Body> {
               title: const Text("Bottom Navigation Bar"),
             ),
             backgroundColor: Color.fromARGB(49, 230, 204, 255),
-            bottomNavigationBar: Container(
-              margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-              decoration: BoxDecoration(boxShadow: [
-                BoxShadow(
-                    color: Colors.black.withOpacity(0.5),
-                    blurRadius: 25,
-                    offset: const Offset(8, 20))
-              ]),
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(30),
-                child: BottomNavigationBar(
-                    backgroundColor: Colors.white,
-                    selectedItemColor: Color.fromARGB(218, 61, 20, 99),
-                    unselectedItemColor: Colors.black,
-                    currentIndex: paginaActual,
-                    onTap: (index) {
-                      setState(() {
-                        paginaActual = index;
-                      });
-                    },
-                    items: const [
-                      BottomNavigationBarItem(icon: Icon(Icons.home), label: "Inicio"),
-                      BottomNavigationBarItem(
-                          icon: Icon(Icons.favorite), label: "Consultar"),
-                    ]),
+            body: screens[paginaActual],
+            bottomNavigationBar: CurvedNavigationBar(items: items,
+              backgroundColor: Colors.transparent, 
+              buttonBackgroundColor: const Color.fromRGBO(79, 0, 148, 58),
+              // color: const Color.fromRGBO(79, 0, 148, 58),
+
+              index: paginaActual,
+              onTap: (index) => setState(()
+                {
+                  paginaActual = index;
+                  items[index] = setIcon(icono: items[index]);
+                  paginaAnterior = paginaActual;
+                }
               ),
             ),
-            body: pages[paginaActual],
           );
           }
           return HomePage();
@@ -80,4 +92,14 @@ class _BodyState extends State<Body> {
         },
       ),
     );
-  }}
+  }
+
+  Icon setIcon({required Icon icono}){
+    setState(() {
+      print('El icono antreiror es: ${items[paginaAnterior].icon}');
+      items[paginaAnterior] = Icon(items[paginaAnterior].icon, color: Color.fromRGBO(79, 0, 148, 58)  );
+    });
+    return Icon(icono.icon, color: Color.fromARGB(255, 244, 231, 255) );
+
+  }
+}

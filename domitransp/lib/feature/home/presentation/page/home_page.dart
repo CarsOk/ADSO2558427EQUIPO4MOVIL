@@ -1,121 +1,78 @@
-import 'package:carousel_slider/carousel_slider.dart';
-import 'package:domitransp/feature/home/presentation/widget/category_icon_widget.dart';
 import 'package:flutter/material.dart';
-import '../../../../routes/routes.dart';
+import 'package:carousel_slider/carousel_slider.dart';
 
-class HomePage extends StatefulWidget {
+class HomePage extends StatelessWidget {
   @override
-  State<HomePage> createState() => _HomeState();
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      home: MyCarousel(),
+    );
+  }
 }
 
-class _HomeState extends State<HomePage> {
-  int _current = 0;
-
-  List<String> imageList = [
-    'https://via.placeholder.com/350x180',
-    'https://via.placeholder.com/350x180',
-    'https://via.placeholder.com/350x180',
-    'https://via.placeholder.com/350x180',
+class MyCarousel extends StatelessWidget {
+  final List<String> imageUrls = [
+    "https://example.com/image1.jpg",
+    "https://example.com/image2.jpg",
+    // Add more image URLs as needed
   ];
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-          // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: <Widget>[
-           CarouselSlider(
-            options: CarouselOptions(
-              autoPlay: true,
-              enlargeCenterPage: true,
-              aspectRatio: 2.0,
-              onPageChanged: (index, reason) {
-                setState(() {
-                  _current = index;
-                });
-              },
-            ),
-            items: imageList.map((item) => Container(
-              child: Center(
-                child: Image.network(
-                  item,
-                  fit: BoxFit.cover,
-                  width: 1000,
-                ),
-              ),
-            )).toList(),
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: imageList.map((url) {
-              int index = imageList.indexOf(url);
-              return Container(
-                width: 8.0,
-                height: 8.0,
-                margin: EdgeInsets.symmetric(vertical: 10.0, horizontal: 2.0),
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: _current == index ? Colors.blueAccent : Colors.grey,
-                ),
-              );
-            }).toList(),
-        )],
-        );
-  }
-}
-
-
-
-class CategoryButton extends StatelessWidget {
-  final Color color;
-  final IconData icon;
-  final String title;
-  GestureDetector? gesture;
-  Function()? onTap;
-
-  CategoryButton({
-    required this.color,
-    required this.icon,
-    required this.title,
-    this.onTap,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        width: 150,
-        height: 150,
-        decoration: BoxDecoration(
-          color: color,
-          borderRadius: BorderRadius.circular(16),
-        ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Icon(
-              icon,
-              size: 48.0,
-              color: Colors.white,
-            ),
-            SizedBox(height: 8),
-            Text(
-              title,
-              style: TextStyle(
-                color: Colors.white,
-                fontWeight: FontWeight.bold,
-                fontSize: 16,
-              ),
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                CategoryIconWidget(icono: Icons.add, onTap: (){}, nombre: 'giros nacionales'),
-              ],
-            ),
-          ],
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Image Carousel'),
+      ),
+      body: CarouselSlider.builder(
+        itemCount: imageUrls.length,
+        itemBuilder: (BuildContext context, int index, int realIndex) {
+          return ImageCarouselItem(url: imageUrls[index]);
+        },
+        options: CarouselOptions(
+          aspectRatio: 16/9,
+          viewportFraction: 0.8,
         ),
       ),
     );
+  }
+}
+
+class ImageCarouselItem extends StatelessWidget {
+  final String url;
+
+  ImageCarouselItem({required this.url});
+
+  @override
+  Widget build(BuildContext context) {
+    return FutureBuilder(
+      future: loadImage(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.done) {
+          // La imagen se ha cargado correctamente
+          return Image.network(url);
+        } else if (snapshot.hasError) {
+          // Se produjo un error al cargar la imagen
+          return Center(
+            child: Text('Error al cargar la imagen'),
+          );
+        } else {
+          // Mientras la imagen se está cargando, puedes mostrar un indicador de carga
+          return Center(
+            child: CircularProgressIndicator(),
+          );
+        }
+      },
+    );
+  }
+
+  Future<void> loadImage() async {
+    try {
+      // Intenta cargar la imagen desde la URL
+      await NetworkImage(url).resolve(ImageConfiguration.empty);
+    } catch (e) {
+      // Captura la excepción y maneja el error
+      print('Error al cargar la imagen desde la URL: $url');
+      // Puedes personalizar esta parte según tus necesidades, como mostrar un marcador de posición o cargar una imagen predeterminada.
+    }
   }
 }
