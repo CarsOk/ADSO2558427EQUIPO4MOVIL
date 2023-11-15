@@ -25,76 +25,95 @@ class _HomeState extends State<HomePage> {
   Widget build(BuildContext context) {
     return RepositoryProvider(
       create: (context) => HomeRepository(),
-      child: BlocProvider(
-        create: (context) => HomeBloc(homeRepository: context.read<HomeRepository>())..add(HomeStarted()),
-        child: Column(
-              // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: <Widget>[
-                BlocBuilder<HomeBloc, HomeState>(
-                builder: (context, state) {
-                  if(state is HomeSucess){
-                    return Column(children: <Widget>[
-                      CarouselSlider(
-                        options: CarouselOptions(
-                          autoPlay: true,
-                          enlargeCenterPage: true,
-                          aspectRatio: 2.0,
-                          onPageChanged: (index, reason) {
-                            setState(() {
-                              _current = index;
-                              print('el index es: $index');
-                            });
-                          },
-                        ),
-                        items: imageList.map((item) => Container(
-                          child: Center(
-                            child: Image.network(
-                              item,
-                              fit: BoxFit.cover,
-                              width: 1000,
-                            ),
+      child: SingleChildScrollView(
+        child: BlocProvider(
+          create: (context) => HomeBloc(homeRepository: context.read<HomeRepository>())..add(HomeStarted()),
+          child: Column(
+                // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: <Widget>[
+                  BlocBuilder<HomeBloc, HomeState>(
+                  builder: (context, state) {
+                    if(state is HomeSucess){
+                      return Column(children: <Widget>[
+                        CarouselSlider(
+                          options: CarouselOptions(
+                            autoPlay: true,
+                            enlargeCenterPage: true,
+                            aspectRatio: 2.0,
+                            onPageChanged: (index, reason) {
+                              setState(() {
+                                _current = index;
+                                // print('el index es: $index');
+                              });
+                            },
                           ),
-                        )).toList(),
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: imageList.asMap().entries.map((entry) {
-                          int index = entry.key;
-                          String url = entry.value;
-                          return Container(
-                            width: 8.0,
-                            height: 8.0,
-                            margin: EdgeInsets.symmetric(vertical: 10.0, horizontal: 2.0),
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              color: _current == index ? Color.fromRGBO(61, 19, 97, 38) : Colors.grey,
+                          items: imageList.map((item) => Container(
+                            child: Center(
+                              child: Image.network(
+                                item,
+                                fit: BoxFit.cover,
+                                width: 1000,
+                              ),
                             ),
-                          );
-                        }).toList(),
+                          )).toList(),
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: imageList.asMap().entries.map((entry) {
+                            int index = entry.key;
+                            String url = entry.value;
+                            return Container(
+                              width: 8.0,
+                              height: 8.0,
+                              margin: EdgeInsets.symmetric(vertical: 10.0, horizontal: 2.0),
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: _current == index ? Color.fromRGBO(61, 19, 97, 38) : Colors.grey,
+                              ),
+                            );
+                          }).toList(),
+                        ),
+                      ]);
+                    }else if(state is HomeFailure){
+                      return Container(
+                        width: 400,
+                        height: 500,
+                        child: Center(
+                          child: Text(state.message),
+                        ),
+                      );
+                    } else if(state is HomeLoading){
+                      return Container(
+                        width: 50,
+                        height: 50,
+                        child: Center(
+                          child: CircularProgressIndicator(),
+                        ),
+                      );
+                    }
+                    return Container();
+                  },
+                ),
+                Padding(padding: EdgeInsets.all(10.0),
+                  child: Column(
+                    children: [
+                      SizedBox(height: 15,),
+                      InkWell(
+                        onTap: () {
+                          Navigator.pushNamed(context, 'consult');
+                        },
+                        child: Image.asset(
+                          'assets/picture/boton/botonConsultarEnvio.png',
+                          // fit: BoxFit.cover,
+                        ),
                       ),
-                    ]);
-                  }else if(state is HomeFailure){
-                    return Container(
-                      width: 400,
-                      height: 500,
-                      child: Center(
-                        child: Text(state.message),
-                      ),
-                    );
-                  } else if(state is HomeLoading){
-                    return Container(
-                      width: 400,
-                      height: 500,
-                      child: Center(
-                        child: CircularProgressIndicator(),
-                      ),
-                    );
-                  }
-                  return Container();
-                },
+                    ],
+                  ),
+                ),
+                
+                 ],
               ),
-               ],
-            ),
+        ),
       ),
     );
   }
@@ -156,3 +175,4 @@ class CategoryButton extends StatelessWidget {
     );
   }
 }
+

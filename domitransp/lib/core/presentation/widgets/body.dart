@@ -9,6 +9,9 @@ import 'package:domitransp/feature/home/presentation/page/home_page.dart';
 import 'package:domitransp/widgets/loading_animate.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import '../../../feature/consult/presentation/widgets/consult.dart';
+import '../../../feature/global/color_app.dart';
+import '../../../widgets/general_animate_loading.dart';
+import '../../../widgets/round_app_bar.dart';
 import '../bloc/user_credential_bloc.dart';
 
 class Body extends StatefulWidget{
@@ -53,7 +56,7 @@ class _BodyState extends State<Body> {
           print('El estado del body es: ${state}');
           if (state is UserCredentialInProgress){
             print('Estoy en progress');
-            return CustomLoadingAnimation();
+            return GeneralAnimateLoading();
           } else if (state is UserCredentialJoined){
           return Scaffold(
             body: Text('tengo usuario'),
@@ -64,15 +67,12 @@ class _BodyState extends State<Body> {
               Consult(),
             ];
             return Scaffold(
-            appBar: AppBar(
-              centerTitle: true,
-              title: const Text("Bottom Navigation Bar"),
-            ),
-            backgroundColor: Color.fromARGB(30, 230, 204, 255),
+            appBar: AppBarRedondo(),
+            backgroundColor: ColorApp.decorador(),
             body: screens[paginaActual],
             bottomNavigationBar: CurvedNavigationBar(items: items,
               backgroundColor: Colors.transparent, 
-              buttonBackgroundColor: const Color.fromRGBO(79, 0, 148, 58),
+              buttonBackgroundColor: const Color.fromRGBO(58, 0, 148, 58),
               // color: const Color.fromRGBO(79, 0, 148, 58),
 
               index: paginaActual,
