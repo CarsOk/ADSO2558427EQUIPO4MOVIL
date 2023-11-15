@@ -7,6 +7,14 @@ class HomeUninitialized extends HomeState {}
 
 class HomeLoading extends HomeState {}
 
-class HomeSucess extends HomeState {}
+class HomeSucess extends HomeState {
+  List<HomeDto> publications;
 
-class HomeFailure extends HomeState {}
+  HomeSucess({required this.publications});
+}
+
+class HomeFailure extends HomeState {
+  String message;
+
+  HomeFailure({required this.message});
+}

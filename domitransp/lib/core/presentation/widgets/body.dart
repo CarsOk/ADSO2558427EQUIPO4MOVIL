@@ -68,7 +68,7 @@ class _BodyState extends State<Body> {
               centerTitle: true,
               title: const Text("Bottom Navigation Bar"),
             ),
-            backgroundColor: Color.fromARGB(49, 230, 204, 255),
+            backgroundColor: Color.fromARGB(30, 230, 204, 255),
             body: screens[paginaActual],
             bottomNavigationBar: CurvedNavigationBar(items: items,
               backgroundColor: Colors.transparent, 
@@ -96,7 +96,6 @@ class _BodyState extends State<Body> {
 
   Icon setIcon({required Icon icono}){
     setState(() {
-      print('El icono antreiror es: ${items[paginaAnterior].icon}');
       items[paginaAnterior] = Icon(items[paginaAnterior].icon, color: Color.fromRGBO(79, 0, 148, 58)  );
     });
     return Icon(icono.icon, color: Color.fromARGB(255, 244, 231, 255) );
