@@ -5,10 +5,18 @@ import 'package:postgres/postgres.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../../../core/data/repository/chat_dto.dart';
+
 class NoConection implements Exception{
   String message;
 
   NoConection({this.message = 'Error de conexión'});
+}
+
+class ResponseEmpty implements Exception{
+  String message;
+
+  ResponseEmpty({this.message = 'Adiciona más datos adicionales sobre tu peticiión para que los asesores respondan de manera más eficiente'});
 }
 class RequestRepository {
   final _baseUrl = 'b5xn4aiw71dpvzecdgzw-postgresql.services.clever-cloud.com';
@@ -18,6 +26,68 @@ class RequestRepository {
   final _contrasena = 'qESlbEQ5OahuAKZkrhXYjgcNhmoO50';
   String _created_at = DateFormat('yyyy-MM-dd HH:mm:ss').format(DateTime.now());
   String _updated_at = DateFormat('yyyy-MM-dd HH:mm:ss').format(DateTime.now());
+
+  Future<bool> sendResponse({required idRequest, required String message}) async{
+    final connection = PostgreSQLConnection(
+        _baseUrl,
+        _puerto,
+        _nombre_base_datos,
+        username: _usuario,
+        password: _contrasena,
+    );
+  print('Entre al response');
+    try {
+      await connection.open();
+      final envio = await connection.query(
+        'INSERT INTO responses (request_id, content, created_at, updated_at) VALUES (@request_id, @content, @created_at, @updated_at)',
+        substitutionValues: {
+          'request_id': idRequest,
+          'content': message,
+          'created_at': _created_at,
+          'updated_at': _updated_at
+        },
+      );
+      await connection.close();
+      return true;
+    } catch (e) {
+      print('Falle en el metodo sendReponse, en el RequestRepository: $e');
+      throw NoConection();
+    }
+  }
+
+
+  Future<List<ChatDto>> getChat({required idRequest}) async{
+    final connection = PostgreSQLConnection(
+        _baseUrl,
+        _puerto,
+        _nombre_base_datos,
+        username: _usuario,
+        password: _contrasena,
+    );
+    try {
+      await connection.open();
+
+      final response = await connection.query(
+        'SELECT * FROM responses WHERE request_id = $idRequest ORDER BY id ASC'
+      );
+
+      await connection.close();
+
+      List responseList = response.toList();
+
+      print('Lo que trae normalmente la peticion de getchat: $response');
+      if(responseList.isNotEmpty){
+        List<ChatDto> getChatList = chatList(response.toList());
+        return getChatList;
+      }else{
+        // throw ResponseEmpty();
+        return [];
+      }
+    } catch (e) {
+      print('Falle en el metodo GetChat: $e');
+      throw NoConection();
+    }
+  }
 
   Future<List<RequestListDto>> validationCode({required SharedPreferences prefs, required List <String>codigos}) async{
     final connection = PostgreSQLConnection(
@@ -39,6 +109,7 @@ class RequestRepository {
       await connection.close();
       
       List<RequestListDto> requests = requestList(response.toList());
+      print('Esto es requests ');
       List<String> newListCode = [];
       List<RequestListDto> actualRequets = [];
       for (var codigo in codigos) {

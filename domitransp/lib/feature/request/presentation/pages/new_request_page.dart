@@ -1,9 +1,10 @@
-import 'package:domitransp/feature/request/data/repository/request_repository.dart';
-import 'package:domitransp/feature/request/presentation/bloc/new_bloc/new_request_bloc.dart';
-import 'package:domitransp/widgets/loading_animate.dart';
+import 'package:domitransp/widgets/general_animate_loading.dart';
 import 'package:flutter/material.dart';
+import 'package:domitransp/feature/request/data/repository/request_repository.dart';
+import 'package:domitransp/widgets/loading_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../bloc/new_request/new_request_bloc.dart';
 import '../cubit/form_field/form_validator_cubit.dart';
 
 class NewRequestPage extends StatelessWidget {
@@ -38,20 +39,20 @@ class NewRequestPage extends StatelessWidget {
           },
           builder: (context, state) {
             if(state is NewRequestInProgress){
-              return CustomLoadingAnimation();
+              return GeneralAnimateLoading();
             } else if(state is NewRequestInFailure){
-              return AlertDialog(
-                title: const Text("Error"),
-                content: Text(state.message),
-                actions: [
-                  TextButton(
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                    },
-                    child: Text("Aceptar"),
-                  ),
-                ],
-              );
+              // return AlertDialog(
+              //   title: const Text("Error"),
+              //   content: Text(state.message),
+              //   actions: [
+              //     TextButton(
+              //       onPressed: () {
+              //         Navigator.of(context).pop();
+              //       },
+              //       child: Text("Aceptar"),
+              //     ),
+              //   ],
+              // );
             } else if(state is NewRequestInSuccess){
               return AlertDialog(
                 title: const Text("Enhorabuena"),

@@ -1,11 +1,15 @@
+  import 'package:domitransp/widgets/loading_chat_animate.dart';
+import 'package:flutter/material.dart';
   import 'package:domitransp/feature/request/data/repository/request_repository.dart';
   import 'package:domitransp/widgets/loading_animate.dart';
-  import 'package:flutter/material.dart';
   import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
   import 'package:shared_preferences/shared_preferences.dart';
 
-  import '../bloc/request_list/request_list_bloc.dart';
-  import 'request_detail_page.dart';
+  import '../../../../widgets/failure_widget.dart';
+import '../bloc/request_list/request_list_bloc.dart';
+import 'request_chat_page.dart';
+
 
   class RequestListPage extends StatelessWidget{
     
@@ -45,15 +49,14 @@
                                   final request = requests[index];
                                   return ListTile(
                                     title: Text(request.title),
-                                    subtitle: Text(request.createdAt.toIso8601String()),
-                                    leading: Icon(Icons.car_rental),
+                                    subtitle: Text(DateFormat('HH:mm dd-MM-yyyy').format(request.createdAt).toString()),
+                                    leading: Icon(Icons.note),
                                     trailing: const Icon(Icons.arrow_forward_ios),
                                     onTap: () {
-                                      // Navega a la página de detalles y pasa los datos de la persona
                                       Navigator.push(
                                         context,
                                         MaterialPageRoute(
-                                          builder: (context) => RequestDetailPage(codeDetail: request),
+                                          builder: (context) => RequestChatPage(request: request),
                                         ),
                                       );
                                     },
@@ -67,11 +70,18 @@
                         // child: Text('Pagina de lista de pedidos'),
                       // );
                     }else if(state is RequestListInProgress){
-                      return CustomLoadingAnimation();
-                    } else if(state is RequestListEmpty){
-                      return (Text('No hay nada en la lista'));
+                      return LoadingChatAnimate();
+                    } else if(state is RequestListFailure){
+                      return(
+                        FailureWidget(
+                          function: ()  => BlocProvider.of<RequestListBloc>(context).add(RequestListStarted()),
+                          message: state.message,
+                        )
+                      );
+                      
                     } else{
-                      return(Text('Explotoooooo'));
+                      return (Text('No hay nada en la lista'));
+                
                     }
                     
                   },

@@ -6,6 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:domitransp/feature/consult/data/repository/consult_repository.dart';
 import 'package:domitransp/feature/consult/presentation/bloc/consult_bloc.dart';
 import '../../../../widgets/loading_animate.dart';
+import '../../../../widgets/loading_consult_package_widget.dart';
 
 class Consult extends StatelessWidget {
   @override
@@ -114,7 +115,7 @@ class Consult extends StatelessWidget {
                   ),
                 ),
                 if (state is ConsultInProgress)
-                  CustomLoadingAnimation(),
+                  LoadingConsultPackageWidget(),
                 if (state is ConsultLoadSuccess)
                   SuccessConsultWidget(consultDto: state.consultaDto),
                   
