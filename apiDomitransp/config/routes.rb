@@ -9,5 +9,7 @@ Rails.application.routes.draw do
     post 'users/confirmation', to: 'users/confirmations#verify_code'
   end
 
-  resources :orders
+  resources :orders, only: [:index, :new, :create]
+
+  get '/users/show', to: 'users#show'
 end
