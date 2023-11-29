@@ -4,30 +4,38 @@ import 'package:dio/dio.dart';
 
 import '../../../../core/data/repository/home_dto.dart';
 
-class ErrorHome implements Exception{
+class ErrorHome implements Exception {
   String message;
 
   ErrorHome({this.message = 'Ha ocurrido un error'});
 }
-class HomeRepository{
-  Future<List<HomeDto>> bannerPromocion() async {
 
+class HomeRepository {
+  Future<List<HomeDto>> bannerPromocion() async {
     try {
       print('ente el metodo de publicidad');
-      final _mockyUrl = 'https://run.mocky.io/v3/7115a032-8ab5-4722-8a48-6b167ab61b5e';
+      final _mockyUrl =
+          'https://run.mocky.io/v3/47c8500f-499c-4a0f-a518-3da6519b3375';
       Dio _dio = Dio();
+      Dio _dioP = Dio();
       print('instancia dio');
       final response = await _dio.get(_mockyUrl);
       print('se envia peticion');
 
-      if (response.statusCode == 200){
+      if (response.statusCode == 200) {
         print('larespuestas fue 200');
         String responseData = json.encode(response.data);
-        print('Esto es data: ${responseData} y es tipo: ${responseData.runtimeType}');
+        print(
+            'Esto es data: ${responseData} y es tipo: ${responseData.runtimeType}');
         final publications = homeDtoFromJson(responseData);
         print('esto es la listas convertida $publications');
+        publications.forEach((publication) {
+          // ignore: unused_local_variable
+          print('Esta es la publicacion ${publication.url}');
+          final response = _dioP.get(publication.url);
+        });
         return publications;
-      } else{
+      } else {
         print('error en la peticion de Dio posters');
         throw ErrorHome;
       }
@@ -60,7 +68,7 @@ class HomeRepository{
         throw ErrorHome(message: 'Error de conexión');
       }
       throw ErrorHome(message: 'Error de conexión');
-    }catch (e) {
+    } catch (e) {
       print('Error inesperado posters; ${e} tipo ${e.runtimeType}');
       throw ErrorHome();
     }

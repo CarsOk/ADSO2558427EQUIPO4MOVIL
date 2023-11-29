@@ -22,17 +22,15 @@ class Consult extends StatelessWidget {
         child: Scaffold(
           body: BlocBuilder<ConsultBloc, ConsultState>(
             builder: (context, state) {
-              return Stack(
-                children: [
-                  caja(size),
-                  icono_logo(),
-                  SingleChildScrollView(
+              return Stack(children: [
+                caja(size),
+                icono_logo(),
+                SingleChildScrollView(
                   child: Padding(
                     padding: const EdgeInsets.only(top: 250),
                     child: Container(
                       padding: const EdgeInsets.all(20),
-                      margin: const EdgeInsets.symmetric(
-                          horizontal: 30),
+                      margin: const EdgeInsets.symmetric(horizontal: 30),
                       width: double.infinity,
                       decoration: BoxDecoration(
                         color: Colors.white,
@@ -49,9 +47,7 @@ class Consult extends StatelessWidget {
                         children: [
                           const SizedBox(height: 10),
                           Text('Rastrear Envío',
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .headline6),
+                              style: Theme.of(context).textTheme.headline6),
                           const SizedBox(
                             height: 30,
                           ),
@@ -61,21 +57,16 @@ class Consult extends StatelessWidget {
                                 TextFormField(
                                   controller: codigoController,
                                   autocorrect: false,
-                                  decoration:
-                                      const InputDecoration(
-                                    enabledBorder:
-                                        UnderlineInputBorder(
-                                      borderSide: BorderSide(
-                                          color: Colors.purple),
+                                  decoration: const InputDecoration(
+                                    enabledBorder: UnderlineInputBorder(
+                                      borderSide:
+                                          BorderSide(color: Colors.purple),
                                     ),
-                                    focusedBorder:
-                                        UnderlineInputBorder(
+                                    focusedBorder: UnderlineInputBorder(
                                       borderSide: BorderSide(
-                                          color: Colors.deepPurple,
-                                          width: 2),
+                                          color: Colors.deepPurple, width: 2),
                                     ),
-                                    hintText:
-                                        "Codigo de seguimiento",
+                                    hintText: "Codigo de seguimiento",
                                     prefixIcon: Icon(
                                       Icons.local_shipping,
                                       color: Colors.deepPurple,
@@ -85,25 +76,23 @@ class Consult extends StatelessWidget {
                                 const SizedBox(height: 33),
                                 MaterialButton(
                                   shape: RoundedRectangleBorder(
-                                      borderRadius:
-                                          BorderRadius.circular(10)),
+                                      borderRadius: BorderRadius.circular(10)),
                                   disabledColor: Colors.grey,
                                   color: Colors.deepPurple,
                                   child: Container(
                                     padding: EdgeInsets.symmetric(
-                                        horizontal: 80,
-                                        vertical: 15),
+                                        horizontal: 80, vertical: 15),
                                     child: Text(
                                       'Buscar',
-                                      style: TextStyle(
-                                          color: Colors.white),
+                                      style: TextStyle(color: Colors.white),
                                     ),
                                   ),
                                   onPressed: () {
-                                    String codigo =
-                                        codigoController.text;
-              
-                                    context.read<ConsultBloc>().add(ConsultEnterPressed(codigo: codigo));
+                                    if (codigoController.text.isNotEmpty) {
+                                      context.read<ConsultBloc>().add(
+                                          ConsultEnterPressed(
+                                              codigo: codigoController.text));
+                                    }
                                   },
                                 )
                               ],
@@ -114,15 +103,12 @@ class Consult extends StatelessWidget {
                     ),
                   ),
                 ),
-                if (state is ConsultInProgress)
-                  LoadingConsultPackageWidget(),
+                if (state is ConsultInProgress) LoadingConsultPackageWidget(),
                 if (state is ConsultLoadSuccess)
                   SuccessConsultWidget(consultDto: state.consultaDto),
-                  
                 if (state is ConsultLoadFailure)
                   FailureConsultWidget(message: state.message),
-                ]
-              );
+              ]);
             },
           ),
         ),

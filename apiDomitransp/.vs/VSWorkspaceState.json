@@ -1,0 +1,11 @@
+{
+  "ExpandedNodes": [
+    "",
+    "\\app",
+    "\\app\\controllers",
+    "\\app\\controllers\\users",
+    "\\lib"
+  ],
+  "SelectedNode": "\\app\\controllers\\users\\confirmations_controller.rb",
+  "PreviewInSolutionExplorer": false
+}

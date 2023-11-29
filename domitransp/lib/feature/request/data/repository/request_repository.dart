@@ -6,36 +6,41 @@ import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../../core/data/repository/chat_dto.dart';
+import '../../../global/database.dart';
 
-class NoConection implements Exception{
+class NoConection implements Exception {
   String message;
 
   NoConection({this.message = 'Error de conexión'});
 }
 
-class ResponseEmpty implements Exception{
+class ResponseEmpty implements Exception {
   String message;
 
-  ResponseEmpty({this.message = 'Adiciona más datos adicionales sobre tu peticiión para que los asesores respondan de manera más eficiente'});
+  ResponseEmpty(
+      {this.message =
+          'Adiciona más datos adicionales sobre tu peticiión para que los asesores respondan de manera más eficiente'});
 }
+
 class RequestRepository {
-  final _baseUrl = 'b5xn4aiw71dpvzecdgzw-postgresql.services.clever-cloud.com';
-  final _puerto = 5432;
-  final _nombre_base_datos = 'b5xn4aiw71dpvzecdgzw';
-  final _usuario = 'u11nk76ov6hufjlqcdvy';
-  final _contrasena = 'qESlbEQ5OahuAKZkrhXYjgcNhmoO50';
+  final _baseUrl = Database.host();
+  final _puerto = Database.puerto();
+  final _nombre_base_datos = Database.databaseName();
+  final _usuario = Database.username();
+  final _contrasena = Database.password();
   String _created_at = DateFormat('yyyy-MM-dd HH:mm:ss').format(DateTime.now());
   String _updated_at = DateFormat('yyyy-MM-dd HH:mm:ss').format(DateTime.now());
 
-  Future<bool> sendResponse({required idRequest, required String message}) async{
+  Future<bool> sendResponse(
+      {required idRequest, required String message}) async {
     final connection = PostgreSQLConnection(
-        _baseUrl,
-        _puerto,
-        _nombre_base_datos,
-        username: _usuario,
-        password: _contrasena,
+      _baseUrl,
+      _puerto,
+      _nombre_base_datos,
+      username: _usuario,
+      password: _contrasena,
     );
-  print('Entre al response');
+    print('Entre al response');
     try {
       await connection.open();
       final envio = await connection.query(
@@ -55,31 +60,29 @@ class RequestRepository {
     }
   }
 
-
-  Future<List<ChatDto>> getChat({required idRequest}) async{
+  Future<List<ChatDto>> getChat({required idRequest}) async {
     final connection = PostgreSQLConnection(
-        _baseUrl,
-        _puerto,
-        _nombre_base_datos,
-        username: _usuario,
-        password: _contrasena,
+      _baseUrl,
+      _puerto,
+      _nombre_base_datos,
+      username: _usuario,
+      password: _contrasena,
     );
     try {
       await connection.open();
 
       final response = await connection.query(
-        'SELECT * FROM responses WHERE request_id = $idRequest ORDER BY id ASC'
-      );
+          'SELECT * FROM responses WHERE request_id = $idRequest ORDER BY id ASC');
 
       await connection.close();
 
       List responseList = response.toList();
 
       print('Lo que trae normalmente la peticion de getchat: $response');
-      if(responseList.isNotEmpty){
+      if (responseList.isNotEmpty) {
         List<ChatDto> getChatList = chatList(response.toList());
         return getChatList;
-      }else{
+      } else {
         // throw ResponseEmpty();
         return [];
       }
@@ -89,25 +92,23 @@ class RequestRepository {
     }
   }
 
-  Future<List<RequestListDto>> validationCode({required SharedPreferences prefs, required List <String>codigos}) async{
+  Future<List<RequestListDto>> validationCode(
+      {required SharedPreferences prefs, required List<String> codigos}) async {
     final connection = PostgreSQLConnection(
-        _baseUrl,
-        _puerto,
-        _nombre_base_datos,
-        username: _usuario,
-        password: _contrasena,
+      _baseUrl,
+      _puerto,
+      _nombre_base_datos,
+      username: _usuario,
+      password: _contrasena,
     );
     print('Entre al metodo vlaidation');
     try {
-
       await connection.open();
 
-        final response = await connection.query(
-          'SELECT * FROM requests'
-        );
-        
+      final response = await connection.query('SELECT * FROM requests');
+
       await connection.close();
-      
+
       List<RequestListDto> requests = requestList(response.toList());
       print('Esto es requests ');
       List<String> newListCode = [];
@@ -119,7 +120,6 @@ class RequestRepository {
             actualRequets.add(codigoBD);
           }
         }
-       
       }
       print("Esto es actualizado la lista actualizada ${actualRequets}");
       return actualRequets;
@@ -129,21 +129,25 @@ class RequestRepository {
     }
   }
 
-  bool sendRequest(){
-
+  bool sendRequest() {
     //codigo para conectar en postgres y enviar solicitud
 
     return true;
   }
 
-  Future<bool> insertRequest({required String email,required String name, required String title,required String subject,required String code}) async {
+  Future<bool> insertRequest(
+      {required String email,
+      required String name,
+      required String title,
+      required String subject,
+      required String code}) async {
     final connection = PostgreSQLConnection(
-        _baseUrl,
-        _puerto,
-        _nombre_base_datos,
-        username: _usuario,
-        password: _contrasena,
-      );
+      _baseUrl,
+      _puerto,
+      _nombre_base_datos,
+      username: _usuario,
+      password: _contrasena,
+    );
 
     try {
       print("Esto es la fecha ${_created_at}");
@@ -161,7 +165,7 @@ class RequestRepository {
           'created_at': _created_at,
           'updated_at': _updated_at
         },
-      );  
+      );
       print('Esto es envio ${envio}');
       print('Esto es envio ${envio.runtimeType}');
 
@@ -173,6 +177,4 @@ class RequestRepository {
       return false;
     }
   }
-
-
 }

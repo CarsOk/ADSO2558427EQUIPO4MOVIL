@@ -1,31 +1,36 @@
 import 'package:flutter/material.dart';
 
+import '../feature/global/color_app.dart';
+
 class AppBarRedondo extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: 190,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.only(
-          bottomLeft: Radius.circular(20.0),
-          bottomRight: Radius.circular(20.0),
-        ),
-        color: Colors.blue, // Color de fondo
-      ),
-      child: AppBar(
-        backgroundColor: Color.fromRGBO(79, 0, 148, 58),
-        title: Center(child: Image.asset('assets/picture/logo/logoEmpresaAppbar.png', height: 80,)),
-        elevation: 0, // Esto elimina la sombra del AppBar
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.only(
-            bottomLeft: Radius.circular(20.0),
-            bottomRight: Radius.circular(20.0),
+    return AppBar(
+      backgroundColor: ColorApp.decorador(),
+      elevation: 0,
+      // shape: RoundedRectangleBorder(
+      //   borderRadius: BorderRadius.only(
+      //     bottomLeft: Radius.circular(20.0),
+      //     bottomRight: Radius.circular(20.0),
+      //   ),
+      // ),
+      flexibleSpace: Center(
+        child: SafeArea(
+          child: SizedBox(
+            width: double.infinity,
+            child: Padding(
+              padding: const EdgeInsets.all(18.0),
+              child: Image.asset(
+                'assets/picture/logo/logoEmpresaAppbar.png',
+              ),
+            ),
           ),
         ),
-        // ...otros atributos del AppBar
       ),
+      // ...otros atributos del AppBar
     );
   }
+
   @override
-  Size get preferredSize => Size.fromHeight(kToolbarHeight);
+  Size get preferredSize => Size.fromHeight(68);
 }
