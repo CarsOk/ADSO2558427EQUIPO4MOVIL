@@ -28,6 +28,14 @@ class ColorApp {
     }
   }
 
+  static Color blanco({Color? color}) {
+    if (color != null) {
+      return color;
+    } else {
+      return Color.fromARGB(222, 255, 255, 255);
+    }
+  }
+
   static Color frio({Color? color}) {
     if (color != null) {
       return color;

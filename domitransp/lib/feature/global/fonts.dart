@@ -68,12 +68,12 @@ class Fonts {
     );
   }
 
-  static personalizado({sizeFont}) {
+  static personalizado({sizeFont, FontWeight? weight, Color? color}) {
     return GoogleFonts.poppins(
       textStyle: TextStyle(
-        color: Color.fromRGBO(255, 255, 255, 0.945),
+        color: color ?? Color.fromRGBO(255, 255, 255, 0.945),
         fontSize: sizeFont ?? 10.0,
-        fontWeight: FontWeight.w600,
+        fontWeight: weight ?? FontWeight.w600,
         fontStyle: FontStyle.normal,
       ),
     );
@@ -112,3 +112,7 @@ class Fonts {
     );
   }
 }
+
+// int u = 1;
+
+// Text hola = Text('font', style: u == 1 ? Fonts.text01() : Fonts());
