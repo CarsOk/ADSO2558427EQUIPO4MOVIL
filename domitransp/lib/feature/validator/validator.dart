@@ -81,7 +81,7 @@ class Validator {
     if (fecha == null) {
       return 'Selecciona una fecha';
     }
-
+    print('El valor de vlue del input fecha es $fecha y es tipo ${fecha.runtimeType}');
     final now = DateTime.now();
     final minDate = now.add(const Duration(days: 5));
     final maxDate =

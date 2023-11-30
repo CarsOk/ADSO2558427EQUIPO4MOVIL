@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:domitransp/feature/global/color_app.dart';
 import 'package:domitransp/feature/validator/validator.dart';
 import 'package:flutter/material.dart';
@@ -8,17 +10,17 @@ import 'package:image_picker/image_picker.dart';
 import 'package:dio/dio.dart';
 import 'package:intl/intl.dart';
 
+import '../../../../core/data/repository/order_dto.dart';
 import '../../../global/fonts.dart';
 import '../../data/repository/order_repository.dart';
 import '../bloc/create_order_bloc.dart';
-
 class CreateOrderPage extends StatefulWidget {
   @override
   _CreateOrderPageState createState() => _CreateOrderPageState();
 }
 
 class _CreateOrderPageState extends State<CreateOrderPage> {
-  final GlobalKey<FormBuilderState> _formKey = GlobalKey<FormBuilderState>();
+  final GlobalKey<FormBuilderState> formKey = GlobalKey<FormBuilderState>();
   TextEditingController consecutivoController = TextEditingController();
 
   TextEditingController paqueteController = TextEditingController();
@@ -27,9 +29,13 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
   TextEditingController cajaController = TextEditingController();
   TextEditingController maletaController = TextEditingController();
   TextEditingController contenedorController = TextEditingController();
+  late String? fecha;
 
-  
-  File? _image;
+  late OrderDto orden;
+  late ImagePicker picker;
+  late PickedFile? pickedFile;
+  late String base64Image;
+  File? image;
   List<String> ciudades = [
     'Barranquilla',
     'Sincelejo',
@@ -47,18 +53,20 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
     ciudadDestino = ciudades[0];
   }
 
-  Future<void> _getImage() async {
-    final picker = ImagePicker();
-    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+   Future<void> _getImage() async {
+    picker = ImagePicker();
+    pickedFile = await picker.getImage(source: ImageSource.gallery);
 
     setState(() {
       if (pickedFile != null) {
-        _image = File(pickedFile.path);
-        print(
-            'Asi se ve la imagen al ser enviada: ${_image} y es tipo ${_image.runtimeType}');
+        image = File(pickedFile!.path);
       }
     });
+
+    // Convertir la imagen a JSON
+    
   }
+
 
   // Future<void> _uploadImage() async {
   //   // Aquí deberías implementar la lógica para enviar la imagen a tu API
@@ -67,9 +75,9 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
   //   // Ejemplo:
   //   Dio dio = Dio();
   //   FormData formData = FormData.fromMap({
-  //     'file': await MultipartFile.fromFile(_image!.path),
+  //     'file': await MultipartFile.fromFile(image!.path),
   //   });
-  //   // FormData imagen = await MultipartFile.fromFile(_image!.path);
+  //   // FormData imagen = await MultipartFile.fromFile(image!.path);
   //   // Response response = await dio.post('TU_API_ENDPOINT', data: formData);
 
   //   // // Maneja la respuesta de la API aquí
@@ -119,7 +127,7 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
                   padding: const EdgeInsets.only(
                       left: 18.0, right: 18.0, top: 8.0, bottom: 2.0),
                   child: FormBuilder(
-                    key: _formKey,
+                    key: formKey,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -132,12 +140,13 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
                         const SizedBox(height: 4.0),
                         FormBuilderDateTimePicker(
                           name: 'date',
+                          // controller: fechaController,
                           style: Fonts.personalizado(sizeFont: 14.0),
                           inputType: InputType.date,
                           format: DateFormat('dd-MM-yyyy'),
                           autovalidateMode: AutovalidateMode.onUserInteraction,
                           validator: (DateTime? value) =>
-                              Validator.inputDate(value),
+                            inputFecha(value),
                           decoration: InputDecoration(
                             filled: true,
                             fillColor: ColorApp.decorador(),
@@ -157,6 +166,7 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
                             hintStyle: const TextStyle(color: Colors.white),
                           ),
                         ),
+                        
                         const SizedBox(height: 8.0),
                         Text(
                           'Digitar consecutivo',
@@ -585,14 +595,14 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
                               crossAxisAlignment: CrossAxisAlignment.center,
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                _image != null
+                                image != null
                                 ? Container(
                                     width: 200,
                                     height: 200,
                                     child: ClipRRect(
                                       borderRadius: BorderRadius.circular(10.0),
                                       child: Image.file(
-                                        _image!,
+                                        image!,
                                         fit: BoxFit.cover,
                                       ),
                                     ),
@@ -600,17 +610,123 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
                                 : Icon(Icons.photo, size: 70, color: Colors.white,),
                             ElevatedButton(
                               onPressed: _getImage,
-                              child: Text('Seleccionar Imagen'),
+                              child: Text('Seleccionar Imagen', style: Fonts.personalizado(color: Colors.black),),
+                              style: ElevatedButton.styleFrom(
+                                    primary: Colors.white,
+                                
+                                    ),
                             ),
                                     
                                   ],
                                 ),
                               ),
                             ),
-                        
-                        ElevatedButton(
-                          onPressed: () {},
-                          child: Text('Subir Imagen'),
+                        const SizedBox(height: 10),
+                        SizedBox(
+                          width: double.infinity,
+                          height: 50.0,
+                          child: ElevatedButton(
+                            onPressed: () {
+                              List<PackAttribute> paquetes = [];
+                              if (formKey.currentState!.validate()) {
+                                if(cajaController.text.isEmpty && paqueteController.text.isEmpty && sobreController.text.isEmpty  && maletaController.text.isEmpty && cavaController.text.isEmpty && contenedorController.text.isEmpty ){
+                                  print('No hay tipo empaque');
+                                  showDialog(
+                                    context: context,
+                                    builder: (BuildContext context) {
+                                      return AlertDialog(
+                                        content: Column(
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: [
+                                            Text('No se puede crear pedido sin ningún tipo de empaque', style: Fonts.personalizado(color: Colors.black)),
+                                            ElevatedButton(onPressed:() {
+                                              Navigator.pop(context);
+                                            }, style: ElevatedButton.styleFrom(
+                                                primary: ColorApp.calidoAnalogo(),
+                                                
+                                              ),child: Text('Ok', style: Fonts.text3()
+                                                          )
+                                            )
+                                          ],
+                                        ),
+                                      );
+                                    },
+                                  );
+                                } else {
+                                  if(image == null){
+                                    showDialog(
+                                      context: context,
+                                      builder: (BuildContext context) {
+                                        return AlertDialog(
+                                          content: Column(
+                                            mainAxisSize: MainAxisSize.min,
+                                            children: [
+                                              Text('Ingresar imagen del empaque', style: Fonts.personalizado(color: Colors.black)),
+                                              ElevatedButton(onPressed:() {
+                                                Navigator.pop(context);
+                                              }, style: ElevatedButton.styleFrom(
+                                                  primary: ColorApp.calidoAnalogo(),
+                                                  
+                                                ),child: Text('Ok', style: Fonts.text3()
+                                                            )
+                                              )
+                                            ],
+                                          ),
+                                        );
+                                      },
+                                    );
+                                  } else{
+                                    if(paqueteController.text.isNotEmpty){
+                                      int cantidadPaquete = int.parse(paqueteController.text);
+                                        paquetes.add(PackAttribute(tipo: 'Paquete', cantidad: cantidadPaquete));
+                                    }
+                                    if(sobreController.text.isNotEmpty){
+                                      int cantidadsobre = int.parse(sobreController.text);
+                                        paquetes.add(PackAttribute(tipo: 'Sobre', cantidad: cantidadsobre));
+                                    }
+                                    if(maletaController.text.isNotEmpty){
+                                      int cantidadmaleta = int.parse(maletaController.text);
+                                        paquetes.add(PackAttribute(tipo: 'Maleta', cantidad: cantidadmaleta));
+                                    }
+                                    if(cavaController.text.isNotEmpty){
+                                      int cantidadcava = int.parse(cavaController.text);
+                                        paquetes.add(PackAttribute(tipo: 'Cava', cantidad: cantidadcava));
+                                    }
+                                    if(contenedorController.text.isNotEmpty){
+                                      int cantidadcontenedor = int.parse(contenedorController.text);
+                                        paquetes.add(PackAttribute(tipo: 'Contenedor', cantidad: cantidadcontenedor));
+                                    }
+                                    // print('LA fecha se ve como: ${fechaController.text} y es tipo ${fechaController.text.runtimeType}');
+                                    print('El lista esta $paquetes');
+                                    print('En el boton fecha es $fecha y tipo ${fecha.runtimeType}');
+                                    imageJson(image!).then((resultado) {
+                                      // Hacer algo con el jsonImage, por ejemplo, imprimirlo
+                                      if(resultado is String) {
+                                        base64Image = resultado;
+                                      } else {
+                                        print('El sresultado es ${resultado.runtimeType}');
+                                      }
+                                    });
+                                    // final jsonImage = await imageJson(image);
+                                    print(' Sera este el fin de mi: ${base64Image} y es tipo ${base64Image.runtimeType}');
+                                    // final DateTime selectedDate = formData['date'];
+                                    // print('LA fecha en json esta como ${selectedDate}');
+                                    print('Me fue al evento');
+                                    OrderDto nuevaOrden = OrderDto(fecha: fecha!, consecutivo: int.parse(consecutivoController.text), avatar: base64Image, destino: ciudadDestino!, origen: ciudadOrigen!, estado: "En espera", packAttributes: paquetes);
+                                    
+                                  }
+                                }
+
+                              }
+                              
+                            },
+                            child: const Text('Enviar pedido'),
+                            style: ElevatedButton.styleFrom(
+                                    primary: ColorApp.calidoAnalogo(),
+                                
+                                    ),
+                                
+                          ),
                         ),
                       ],
                     ),
@@ -622,5 +738,40 @@ class _CreateOrderPageState extends State<CreateOrderPage> {
         ),
       ),
     );
+  }
+  
+
+  String? inputFecha(dynamic value) {
+    if (value == null) {
+      return 'Selecciona una fecha';
+     
+    }
+    fecha = DateFormat('yyyy-MM-dd').format(value);
+    print('El valor de vlue del input fecha es $fecha y es tipo ${fecha.runtimeType}');
+    final now = DateTime.now();
+    final minDate = now.add(const Duration(days: 5));
+    final maxDate =
+        now.add(const Duration(days: 730));
+
+    if (value.isBefore(minDate)) {
+      return 'La fecha minima es de 5 días despues de la actual';
+    }
+    if (value.isAfter(maxDate)) {
+      return 'Supero fecha permitida (maximo 2 años)';
+    }
+
+    return null;
+  }
+
+  Future<String> imageJson(File? image) async{
+    // final formData = formKey.currentState!.value;
+    // if (image != null) {
+    final imageBytes = await image!.readAsBytes();
+    final imageBase64 = base64Encode(imageBytes);
+    final jsonData = {'image': imageBase64};
+    // jsonImage = imageBase64;
+    // Enviar el JSON o realizar otras operaciones
+    return imageBase64;
+  // }
   }
 }
