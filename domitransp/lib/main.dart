@@ -7,6 +7,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:domitransp/routes/routes.dart';
 import 'core/presentation/widgets/body.dart';
 import 'feature/create_order/presentation/page/create_order_page.dart';
+import 'feature/order/presentation/page/order_page.dart';
 
 void main() {
   runApp(const MyApp());
@@ -29,8 +30,8 @@ class MyApp extends StatelessWidget {
           theme: ThemeData(
             primarySwatch: Colors.purple,
           ),
-          home: CreateOrderPage(),
-          // home: Body(),
+          // home: OrderPage(),
+          home: Body(),
           // home: OptPage(email: 'hola@gmail.com'),
           routes: routes,
         ),

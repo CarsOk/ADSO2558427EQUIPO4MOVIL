@@ -1,4 +1,5 @@
 import 'package:domitransp/feature/account/presentation/bloc/account_bloc.dart';
+import 'package:domitransp/main.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -6,6 +7,7 @@ import '../../../../core/data/repository/user_repository.dart';
 import '../../../../core/presentation/bloc/user_credential_bloc.dart';
 import '../../../../widgets/circular_animate_widget.dart';
 import '../../../global/fonts.dart';
+import '../../../home/presentation/page/home_page.dart';
 import 'profile_image_widget.dart';
 
 class InfoUserWidget extends StatelessWidget {
@@ -105,10 +107,22 @@ class InfoUserWidget extends StatelessWidget {
                               ),
                               InkWell(
                                 onTap: () {
-                                  Navigator.pushNamed(context, 'consult');
+                                  Navigator.pushNamed(context, 'mis_envios');
                                 },
                                 child: Image.asset(
                                   'assets/picture/boton/botonsEnvios_1.png',
+                                  // fit: BoxFit.cover,
+                                ),
+                              ),
+                              const SizedBox(
+                                height: 15,
+                              ),
+                              InkWell(
+                                onTap: () {
+                                  Navigator.pushNamed(context, 'nuevo_envio');
+                                },
+                                child: Image.asset(
+                                  'assets/picture/boton/boto_crear_orden.png',
                                   // fit: BoxFit.cover,
                                 ),
                               ),
@@ -119,6 +133,23 @@ class InfoUserWidget extends StatelessWidget {
                                           userRepository:
                                               context.read<UserRepository>())
                                       .add(AccountSignOut());
+                                  UserCredentialBloc(
+                                          userRepository:
+                                              context.read<UserRepository>())
+                                      .add(AppStarted());
+                                  // Navigator.pushReplacement(
+                                  //   context,
+                                  //   MaterialPageRoute(
+                                  //     builder: (_context) => MyApp(),
+                                  //   ),
+                                  // );
+
+                                  Navigator.pushAndRemoveUntil(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => MyApp()),
+                                    (Route<dynamic> route) => false,
+                                  );
                                 },
                                 child: Image.asset(
                                   'assets/picture/boton/botonSalir.png',

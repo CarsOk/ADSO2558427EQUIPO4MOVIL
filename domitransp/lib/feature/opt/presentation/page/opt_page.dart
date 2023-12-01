@@ -41,7 +41,7 @@ class OptPage extends StatelessWidget {
         child: BlocConsumer<OptBloc, OptState>(
           listener: (context, state) {
             if (state is OptSuccess) {
-              Navigator.push(
+              Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(
                   builder: (context) => Body(),

@@ -85,6 +85,7 @@ flutter:
     - assets/picture/boton/botonConsultarMisEnvios.png
     - assets/picture/boton/botonSalir.png
     - assets/picture/boton/botonConsultarEnvios.png
+    - assets/picture/boton/boto_crear_orden.png
     - assets/picture/logo/logoEmpresaAppbar.png
     - assets/picture/fondo/fondo-inicio.png
     - assets/picture/logo/nombreEmpresa.png

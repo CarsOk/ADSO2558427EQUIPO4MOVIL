@@ -25,15 +25,11 @@ class _BodyState extends State<Body> {
   List pages = [];
   List<IconoDegradadoWidget> items = [
     IconoDegradadoWidget(icono: Icons.home_outlined),
-    IconoDegradadoWidget(icono: Icons.build_outlined),
     IconoDegradadoWidget(icono: Icons.account_circle_outlined),
-    IconoDegradadoWidget(icono: Icons.location_on_outlined),
   ];
   final screens = [
     HomePage(),
-    ServicePage(),
     AccountPage(),
-    AgencyPage(),
   ];
   // ConnectivityResult _connectivityResult = ConnectivityResult.none;
 

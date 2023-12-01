@@ -15,7 +15,7 @@ class HomeRepository {
     try {
       print('ente el metodo de publicidad');
       final _mockyUrl =
-          'https://run.mocky.io/v3/47c8500f-499c-4a0f-a518-3da6519b3375';
+          'https://run.mocky.io/v3/1f0f30d4-ac8a-48da-8ed7-427e822f915c';
       Dio _dio = Dio();
       Dio _dioP = Dio();
       print('instancia dio');

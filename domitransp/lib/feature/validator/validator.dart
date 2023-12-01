@@ -9,19 +9,18 @@ class Validator {
     return null;
   }
 
-  static String? consecutivo(String? consecutivo){
+  static String? consecutivo(String? consecutivo) {
     if (consecutivo!.isNotEmpty) {
       final codigoConcecutivo = int.tryParse(consecutivo);
       if (codigoConcecutivo != null) {
-        if (codigoConcecutivo < 1 || codigoConcecutivo.toString().length > 5) {
-        return 'Ingresar concecutivo valido';
-      } else {
-        return null;
-      }
+        if (codigoConcecutivo < 10000 || codigoConcecutivo > 99999) {
+          return 'Ingresar un rango valido (10000 - 99999)';
+        } else {
+          return null;
+        }
       } else {
         return 'Ingrese tipo de dato valido';
       }
-      
     } else {
       return 'Campo requerido';
     }
@@ -39,7 +38,7 @@ class Validator {
   //     } else {
   //       return 'Ingrese cantidad valida';
   //     }
-      
+
   //   } else {
   //     return 'Campo requerido';
   //   }
@@ -58,19 +57,18 @@ class Validator {
   }
 
   static String? tipoPaquete(String? cantidad) {
-    if(cantidad!.isNotEmpty){
-      if (int.tryParse(cantidad!) != null ) {
+    if (cantidad!.isNotEmpty) {
+      if (int.tryParse(cantidad!) != null) {
         print('la cantidad es ${cantidad}');
-         if (int.tryParse(cantidad!) !>= 1 ) {
-          if (int.tryParse(cantidad!) !> 999) {
-            return 'Cantidad maxima (999)';
+        if (int.tryParse(cantidad!)! >= 1) {
+          if (int.tryParse(cantidad!)! > 9) {
+            return 'Cantidad maxima (9)';
           } else {
             return null;
           }
-         } else {
+        } else {
           return 'Cantidad minima 1';
-         }
-        
+        }
       } else {
         return 'Cantidad invalida';
       }
@@ -81,11 +79,11 @@ class Validator {
     if (fecha == null) {
       return 'Selecciona una fecha';
     }
-    print('El valor de vlue del input fecha es $fecha y es tipo ${fecha.runtimeType}');
+    print(
+        'El valor de vlue del input fecha es $fecha y es tipo ${fecha.runtimeType}');
     final now = DateTime.now();
     final minDate = now.add(const Duration(days: 5));
-    final maxDate =
-        now.add(const Duration(days: 730));
+    final maxDate = now.add(const Duration(days: 730));
 
     if (fecha.isBefore(minDate)) {
       return 'La fecha minima es de 5 días despues de la actual';

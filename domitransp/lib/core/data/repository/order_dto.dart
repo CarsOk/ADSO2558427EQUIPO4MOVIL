@@ -1,6 +1,8 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:intl/intl.dart';
+
 OrderDto orderDtoFromJson(String str) => OrderDto.fromJson(json.decode(str));
 
 String orderDtoToJson(OrderDto data) => json.encode(data.toJson());
@@ -8,11 +10,10 @@ String orderDtoToJson(OrderDto data) => json.encode(data.toJson());
 class OrderDto {
   String fecha;
   int consecutivo;
-  String avatar; // Ahora será una cadena Base64
+  String avatar;
   String destino;
   String origen;
   String estado;
-  int valor;
   List<PackAttribute> packAttributes;
 
   OrderDto({
@@ -22,36 +23,36 @@ class OrderDto {
     required this.destino,
     required this.origen,
     required this.estado,
-    required this.valor,
     required this.packAttributes,
   });
 
   factory OrderDto.fromJson(Map<String, dynamic> json) => OrderDto(
-        fecha: DateTime.parse(json["fecha"]),
+        fecha: json["fecha"],
         consecutivo: json["consecutivo"],
         avatar: json["avatar"],
         destino: json["destino"],
         origen: json["origen"],
         estado: json["estado"],
-        valor: json["valor"],
         packAttributes: List<PackAttribute>.from(
-            json["pack_attributes"].map((x) => PackAttribute.fromJson(x))),
+            json["packs_attributes"].map((x) => PackAttribute.fromJson(x))),
       );
 
   Map<String, dynamic> toJson() => {
-        "fecha":
-            "${fecha.year.toString().padLeft(4, '0')}-${fecha.month.toString().padLeft(2, '0')}-${fecha.day.toString().padLeft(2, '0')}",
+        "fecha": formattedFecha(fecha),
         "consecutivo": consecutivo,
         "avatar": avatar,
         "destino": destino,
         "origen": origen,
         "estado": estado,
-        "valor": valor,
-        "pack_attributes": List<dynamic>.from(
-            packAttributes.map((x) => x.toJson())),
+        "packs_attributes":
+            List<dynamic>.from(packAttributes.map((x) => x.toJson())),
       };
 
-  // Agregar un método para convertir la imagen a Base64
+  String formattedFecha(fecha) {
+    DateTime parsedFecha = DateTime.tryParse(fecha) ?? DateTime.now();
+    return DateFormat('yyyy-MM-dd HH:mm:ss.SSSSSSSSS Z').format(parsedFecha);
+  }
+
   void convertirImagenABase64(String pathToImage) {
     List<int> imageBytes = File(pathToImage).readAsBytesSync();
     avatar = base64Encode(imageBytes);

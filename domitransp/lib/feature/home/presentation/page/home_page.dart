@@ -8,6 +8,8 @@ import '../../../../routes/routes.dart';
 import '../../../global/color_app.dart';
 
 class HomePage extends StatefulWidget {
+  int? numeroPaginado;
+  HomePage({this.numeroPaginado});
   @override
   State<HomePage> createState() => _HomeState();
 }
@@ -39,48 +41,53 @@ class _HomeState extends State<HomePage> {
                   if (state is HomeSucess) {
                     print('El home es success');
                     return Column(children: <Widget>[
-                      CarouselSlider(
-                        options: CarouselOptions(
-                          autoPlay: true,
-                          enlargeCenterPage: true,
-                          aspectRatio: 2.0,
-                          onPageChanged: (index, reason) {
-                            setState(() {
-                              _current = index;
-                              // print('el index es: $index');
-                            });
-                          },
-                        ),
-                        items: state.publications
-                            .map((publication) => Container(
-                                  child: Center(
-                                    child: Image.network(
-                                      publication.url,
-                                      fit: BoxFit.cover,
-                                      width: 1000,
-                                    ),
-                                  ),
-                                ))
-                            .toList(),
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: imageList.asMap().entries.map((entry) {
-                          int index = entry.key;
-                          String url = entry.value;
-                          return Container(
-                            width: 8.0,
-                            height: 8.0,
-                            margin: EdgeInsets.symmetric(
-                                vertical: 10.0, horizontal: 2.0),
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              color: _current == index
-                                  ? Color.fromRGBO(61, 19, 97, 38)
-                                  : Colors.grey,
+                      Column(
+                        children: [
+                          const SizedBox(height: 20),
+                          CarouselSlider(
+                            options: CarouselOptions(
+                              autoPlay: true,
+                              enlargeCenterPage: true,
+                              aspectRatio: 2.0,
+                              onPageChanged: (index, reason) {
+                                setState(() {
+                                  _current = index;
+                                  // print('el index es: $index');
+                                });
+                              },
                             ),
-                          );
-                        }).toList(),
+                            items: state.publications
+                                .map((publication) => Container(
+                                      child: Center(
+                                        child: Image.network(
+                                          publication.url,
+                                          fit: BoxFit.cover,
+                                          width: 1000,
+                                        ),
+                                      ),
+                                    ))
+                                .toList(),
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: imageList.asMap().entries.map((entry) {
+                              int index = entry.key;
+                              String url = entry.value;
+                              return Container(
+                                width: 8.0,
+                                height: 8.0,
+                                margin: EdgeInsets.symmetric(
+                                    vertical: 10.0, horizontal: 2.0),
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  color: _current == index
+                                      ? ColorApp.calidoAnalogo()
+                                      : Colors.grey,
+                                ),
+                              );
+                            }).toList(),
+                          ),
+                        ],
                       ),
                     ]);
                   } else if (state is HomeFailure) {
