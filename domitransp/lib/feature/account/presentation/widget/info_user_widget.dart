@@ -60,7 +60,8 @@ class InfoUserWidget extends StatelessWidget {
                                         SizedBox(
                                           height: 15,
                                         ),
-                                        Text(state.user.nombre,
+                                        Text(
+                                            '${state.user.nombre} ${state.user.apellido}',
                                             style: Fonts.titleThin())
                                       ],
                                     ),

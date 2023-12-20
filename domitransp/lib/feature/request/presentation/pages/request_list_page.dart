@@ -15,93 +15,94 @@ class RequestListPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: Text('Peticiones'),
-          backgroundColor: Color(0xFF4E0096),
-          actions: <Widget>[
-            IconButton(
-                onPressed: () {
-                  Navigator.pushNamed(context, 'new_request');
-                },
-                icon: Icon(Icons.note_add))
-          ],
-        ),
-        body: RepositoryProvider(
-          create: (context) => RequestRepository(),
-          child: BlocProvider(
-            create: (context) => RequestListBloc(
-                requestRepository: context.read<RequestRepository>())
-              ..add(RequestListStarted()),
-            child: BlocBuilder<RequestListBloc, RequestListState>(
-              builder: (context, state) {
-                if (state is RequestListSuccess) {
-                  final requests = state.listaPedidos;
-                  // return SingleChildScrollView(
-                  // child: Padding(
-                  //     padding: EdgeInsets.all(18.0),
-
-                  return ListView.builder(
-                      itemCount: requests.length,
-                      itemBuilder: (context, index) {
-                        if (index < state.listaPedidos.length) {
-                          final request = requests[index];
-                          return ListTile(
-                            title: Text(request.title),
-                            subtitle: Text(DateFormat('HH:mm dd-MM-yyyy')
-                                .format(request.createdAt)
-                                .toString()),
-                            leading: Icon(Icons.note),
-                            trailing: const Icon(Icons.arrow_forward_ios),
-                            onTap: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) =>
-                                      RequestChatPage(request: request),
-                                ),
-                              );
-                            },
-                          );
-                        } else {
-                          return Container();
-                        }
-                      });
-                  // ),
-                  // child: Text('Pagina de lista de pedidos'),
-                  // );
-                } else if (state is RequestListInProgress) {
-                  return LoadingChatAnimate();
-                } else if (state is RequestListFailure) {
-                  return (FailureWidget(
-                    function: () => BlocProvider.of<RequestListBloc>(context)
-                        .add(RequestListStarted()),
-                    message: state.message,
-                  ));
-                } else {
-                  return Center(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        const Icon(
-                          Icons.note_alt_outlined,
-                          size: 80,
-                          color: Color.fromRGBO(0, 0, 0, 0.712),
-                        ),
-                        Text(
-                          'No hay peticiones',
-                          style: Fonts.personalizado(
-                              sizeFont: 30.0,
-                              color: Color.fromRGBO(0, 0, 0, 0.712)),
-                        ),
-                      ],
-                    ),
-                  );
-                }
+      appBar: AppBar(
+        title: Text('Peticiones'),
+        backgroundColor: Color(0xFF4E0096),
+        actions: <Widget>[
+          IconButton(
+              onPressed: () {
+                Navigator.pushNamed(context, 'new_request');
               },
-            ),
+              icon: Icon(Icons.note_add))
+        ],
+      ),
+      body: RepositoryProvider(
+        create: (context) => RequestRepository(),
+        child: BlocProvider(
+          create: (context) => RequestListBloc(
+              requestRepository: context.read<RequestRepository>())
+            ..add(RequestListStarted()),
+          child: BlocBuilder<RequestListBloc, RequestListState>(
+            builder: (context, state) {
+              if (state is RequestListSuccess) {
+                final requests = state.listaPedidos;
+                // return SingleChildScrollView(
+                // child: Padding(
+                //     padding: EdgeInsets.all(18.0),
+
+                return ListView.builder(
+                    itemCount: requests.length,
+                    itemBuilder: (context, index) {
+                      if (index < state.listaPedidos.length) {
+                        final request = requests[index];
+                        return ListTile(
+                          title: Text(request.title),
+                          subtitle: Text(DateFormat('HH:mm dd-MM-yyyy')
+                              .format(request.createdAt)
+                              .toString()),
+                          leading: Icon(Icons.note),
+                          trailing: const Icon(Icons.arrow_forward_ios),
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    RequestChatPage(request: request),
+                              ),
+                            );
+                          },
+                        );
+                      } else {
+                        return Container();
+                      }
+                    });
+                // ),
+                // child: Text('Pagina de lista de pedidos'),
+                // );
+              } else if (state is RequestListInProgress) {
+                return LoadingChatAnimate();
+              } else if (state is RequestListFailure) {
+                return (FailureWidget(
+                  function: () => BlocProvider.of<RequestListBloc>(context)
+                      .add(RequestListStarted()),
+                  message: state.message,
+                ));
+              } else {
+                return Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      const Icon(
+                        Icons.note_alt_outlined,
+                        size: 80,
+                        color: Color.fromRGBO(0, 0, 0, 0.712),
+                      ),
+                      Text(
+                        'No hay peticiones',
+                        style: Fonts.personalizado(
+                            sizeFont: 30.0,
+                            color: Color.fromRGBO(0, 0, 0, 0.712)),
+                      ),
+                    ],
+                  ),
+                );
+              }
+            },
           ),
-        ));
+        ),
+      ),
+    );
   }
 
   Future<List<String>> getRequestList() async {

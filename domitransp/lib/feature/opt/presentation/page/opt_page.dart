@@ -96,7 +96,7 @@ class OptPage extends StatelessWidget {
                                       width: double.infinity,
                                       child: Text(
                                         'Escribe tu codigo',
-                                        textAlign: TextAlign.left,
+                                        textAlign: TextAlign.center,
                                         style: GoogleFonts.poppins(
                                           textStyle: const TextStyle(
                                             color: Color.fromRGBO(

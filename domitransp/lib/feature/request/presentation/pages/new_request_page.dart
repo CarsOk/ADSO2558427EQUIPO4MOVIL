@@ -13,7 +13,8 @@ class NewRequestPage extends StatelessWidget {
   final _subjectController = TextEditingController();
   final _emailController = TextEditingController();
   bool isFormValid = false;
-  final _formKey = GlobalKey<FormState>(); // Agrega esta línea para definir _formKey
+  final _formKey =
+      GlobalKey<FormState>(); // Agrega esta línea para definir _formKey
 
   @override
   Widget build(BuildContext context) {
@@ -38,9 +39,9 @@ class NewRequestPage extends StatelessWidget {
             }
           },
           builder: (context, state) {
-            if(state is NewRequestInProgress){
+            if (state is NewRequestInProgress) {
               return GeneralAnimateLoading();
-            } else if(state is NewRequestInFailure){
+            } else if (state is NewRequestInFailure) {
               // return AlertDialog(
               //   title: const Text("Error"),
               //   content: Text(state.message),
@@ -53,20 +54,7 @@ class NewRequestPage extends StatelessWidget {
               //     ),
               //   ],
               // );
-            } else if(state is NewRequestInSuccess){
-              return AlertDialog(
-                title: const Text("Enhorabuena"),
-                content: Text("Se ha creado exitosamente"),
-                actions: [
-                  TextButton(
-                    onPressed: () {
-                      Navigator.pushNamed(context, 'list_request');
-                    },
-                    child: Text("Aceptar"),
-                  ),
-                ],
-              );
-            }
+            } else if (state is NewRequestInSuccess) {}
             return Scaffold(
               appBar: AppBar(
                 title: Text('Solicitar petición'),
@@ -75,7 +63,8 @@ class NewRequestPage extends StatelessWidget {
               body: SingleChildScrollView(
                 child: Padding(
                   padding: EdgeInsets.all(16.0),
-                  child: Form( // Utiliza un formulario para envolver los campos de texto
+                  child: Form(
+                    // Utiliza un formulario para envolver los campos de texto
                     key: _formKey, // Asigna la clave del formulario
                     child: Column(
                       children: [
@@ -103,56 +92,69 @@ class NewRequestPage extends StatelessWidget {
                         ),
                         Container(
                           child: ElevatedButton(
-                          style: ButtonStyle(
-                            backgroundColor: MaterialStateProperty.all(Color(0xFF4E0096)),
-                          ),
-                          onPressed: () {
-                            final titleIsValid = _titleController.text.isNotEmpty;
-                            final nameIsValid = _nameController.text.isNotEmpty;
-                            final subjectIsValid = _subjectController.text.isNotEmpty;
-                            final emailIsValid = isValidEmail(_emailController.text);
+                            style: ButtonStyle(
+                              backgroundColor:
+                                  MaterialStateProperty.all(Color(0xFF4E0096)),
+                            ),
+                            onPressed: () {
+                              final titleIsValid =
+                                  _titleController.text.isNotEmpty;
+                              final nameIsValid =
+                                  _nameController.text.isNotEmpty;
+                              final subjectIsValid =
+                                  _subjectController.text.isNotEmpty;
+                              final emailIsValid =
+                                  isValidEmail(_emailController.text);
 
-                            // Verificar si todos los campos son válidos
-                            if (titleIsValid && nameIsValid && subjectIsValid && emailIsValid) {
-                              // Todos los campos son válidos, ejecuta el evento del bloc aquí
-                              print("Todos los campos son válidos. Ejecutando el evento del bloc.");
-                              context.read<NewRequestBloc>().add(
-                              NewRequestEnterPressed(
-                                  title: _titleController.text, name: _nameController.text, subject: _subjectController.text, email: _emailController.text));
-                            } else {
-                              // Al menos un campo no es válido, muestra un cuadro de diálogo emergente
-                              showDialog(
-                                context: context,
-                                builder: (BuildContext context) {
-                                  return AlertDialog(
-                                    title: Text("Campos incompletos"),
-                                    content: Text("Por favor, complete todos los campos correctamente."),
-                                    actions: [
-                                      TextButton(
-                                        onPressed: () {
-                                          Navigator.of(context).pop(); // Cierra el cuadro de diálogo
-                                        },
-                                        child: Text("Aceptar"),
-                                      ),
-                                    ],
-                                  );
-                                },
-                              );
-                            }
-                          },
-                          child: Text(
-                            'Enviar',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 14,
+                              // Verificar si todos los campos son válidos
+                              if (titleIsValid &&
+                                  nameIsValid &&
+                                  subjectIsValid &&
+                                  emailIsValid) {
+                                // Todos los campos son válidos, ejecuta el evento del bloc aquí
+                                print(
+                                    "Todos los campos son válidos. Ejecutando el evento del bloc.");
+                                context.read<NewRequestBloc>().add(
+                                    NewRequestEnterPressed(
+                                        title: _titleController.text,
+                                        name: _nameController.text,
+                                        subject: _subjectController.text,
+                                        email: _emailController.text));
+                              } else {
+                                // Al menos un campo no es válido, muestra un cuadro de diálogo emergente
+                                showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    return AlertDialog(
+                                      title: Text("Campos incompletos"),
+                                      content: Text(
+                                          "Por favor, complete todos los campos correctamente."),
+                                      actions: [
+                                        TextButton(
+                                          onPressed: () {
+                                            Navigator.of(context)
+                                                .pop(); // Cierra el cuadro de diálogo
+                                          },
+                                          child: Text("Aceptar"),
+                                        ),
+                                      ],
+                                    );
+                                  },
+                                );
+                              }
+                            },
+                            child: Text(
+                              'Enviar',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 14,
+                              ),
                             ),
                           ),
+                          width: double.infinity,
+                          height: 42.0,
                         ),
-                        width: double.infinity,
-                        height: 42.0,
-                        ),
-
                       ],
                     ),
                   ),
